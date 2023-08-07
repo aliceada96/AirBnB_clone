@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# This script establishes the boilerplate directory structure
+# create structure
+mkdir -p models/engine/ \
+    tests/test_models/test_engine/ \
+    
+touch README.md \
+    AUTHORS \
+    console.py \
+    models/__init__.py \
+    models/base_model.py \
+    models/user.py \
+    models/state.py \
+    models/city.py \
+    models/amenity.py \
+    models/place.py \
+    models/review.py \
+    models/engine/__init__.py \
+    models/engine/file_storage.py
+touch tests/__init__.py \
+    tests/test_console.py \
+    tests/test_models/__init__.py \
+    tests/test_models/test_base_model.py \
+    tests/test_models/test_user.py \
+    tests/test_models/test_state.py \
+    tests/test_models/test_city.py \
+    tests/test_models/test_amenity.py \
+    tests/test_models/test_place.py \
+    tests/test_models/test_review.py \
+    tests/test_models/test_engine/__init__.py \
+    tests/test_models/test_engine/test_file_storage.py \
+# add shebang to all the relevant python files
+# Main function to traverse directories and add shebang
+traverse_directories() {
+  local directory="$1"
+  for file in "$directory"/*; do
+    if [[ -d "$file" ]]; then
+      traverse_directories "$file"
+    elif [[ "$file" == *.py && $file != *__init__.py ]]; then
+      echo "#!/usr/bin/python3">> "$file"
+      echo "shebanged $file"
+    fi
+  done
+}
+traverse_directories "$(pwd)"
+
