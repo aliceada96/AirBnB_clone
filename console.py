@@ -6,10 +6,14 @@ import cmd
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models import storage
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
-"""
 
-"""
 class HBNBCommand(cmd.Cmd):
     """Entry point of the command interpreter.
 
@@ -20,8 +24,13 @@ class HBNBCommand(cmd.Cmd):
         _type_: _description_
     """
     prompt = "(hbnb) "
-    classes = {"BaseModel",
-               "Users",
+    classes = {'BaseModel',
+               'Users',
+               'State',
+               'City',
+               'Place',
+               'Review',
+               'Amenity',
                }
 
     def do_quit(self, arg):
