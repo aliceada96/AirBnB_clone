@@ -42,6 +42,7 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """Quit command to exit the program.
         """
+        print()
         return True
     
     def emptyline(self) -> bool:
@@ -123,6 +124,22 @@ class HBNBCommand(cmd.Cmd):
             list_of_instances.append(eval(i.__class__.__name__)(**i).__str__())
         print(list_of_instances)
 
+    def do_count(self, args):
+        """Print number of objects from class."""
+        args = args.split()
+        if not args or len(args)!= 1:
+            print('** class name missing **')
+            return
+        elif args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        else:
+            instances = 0
+            for i in storage.all().values():
+                if args[0] == i["__class__"]:
+                    instances +=1
+            print(instances)
+
     def do_update(self, args):
         """Print all string representation of all instances
         Represenation is based or not on the class name. 
@@ -130,6 +147,9 @@ class HBNBCommand(cmd.Cmd):
         Args:
             args (str): a string containing args separated by spaces.
         """
+        input = "update BaseModel e99258cd-51c9-4e6d-9039-e9eac90a93b6 {'name': 'James', 'age': 98}"
+        # how do we split the line "update BaseModel e99258cd-51c9-4e6d-9039-e9eac90a93b6 {'name': 'James', 'age': 98}"
+        # into up
         args = args.split()
         if not args or len(args) == 0:
             print('** class name missing **')
@@ -153,8 +173,16 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             key = args[2]
-            value = args[3] # TODO probably should do eval() here
-            storage.all()["{}.{}".format(args[0], args[1])][key] = value
+            value = args[3]
+            # check that the input has a dictionary from the 3rd command
+            if isinstance(eval(''.join(args[2:])), dict):
+                # convert the 3rd command from str to dict and iterate
+                for k, v in eval("{}".format(''.join(args[2:]))).items():
+                    # update the dict with the key and value...
+                    storage.all()["{}.{}".format(args[0], args[1])][k] = v
+            else:
+                # no dictionary - standard format.
+                storage.all()["{}.{}".format(args[0], args[1])][key] = value
             storage.save()
 
     def default(self, line: str) -> None:
@@ -172,7 +200,7 @@ class HBNBCommand(cmd.Cmd):
         calls = {"all": self.do_all,
                  "show": self.do_show,
                  "destroy": self.do_destroy,
-                 #"count": self.do_count,
+                 "count": self.do_count,
                  "update": self.do_update,
                  }
 
@@ -193,4 +221,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-    print() # TODO will this be valid for all exits
+    #print("") # TODO will this be valid for all exits
