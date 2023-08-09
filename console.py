@@ -2,6 +2,7 @@
 """This module implements a simple command interpreter for AirBnB program.
 """
 import cmd
+import re
 
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
@@ -25,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb) "
     classes = {'BaseModel',
-               'Users',
+               'User',
                'State',
                'City',
                'Place',
@@ -119,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
             return
         list_of_instances = []
         for i in storage.all().values():
-            list_of_instances.append(BaseModel(**i).__str__())
+            list_of_instances.append(eval(i.__class__.__name__)(**i).__str__())
         print(list_of_instances)
 
     def do_update(self, args):
@@ -156,6 +157,40 @@ class HBNBCommand(cmd.Cmd):
             storage.all()["{}.{}".format(args[0], args[1])][key] = value
             storage.save()
 
+    def default(self, line: str) -> None:
+        """Call on an input line when the command prefix is not recognized.
+
+        If this method is not overridden, it prints an error message and
+        returns.
+
+        Args:
+            line (str): sting of commands in a non-standard format
+
+        Returns:
+            str: calls the corresponding command the standard format
+        """
+        calls = {"all": self.do_all,
+                 "show": self.do_show,
+                 "destroy": self.do_destroy,
+                 #"count": self.do_count,
+                 "update": self.do_update,
+                 }
+
+        if "." not in line:
+            print('*** Unknown syntax: {}\n'.format(line))
+            return False
+        else:
+            args = line.split('.', maxsplit=1)
+            # split the second arg at '(',')', and ','
+            others = re.split(r'[)(,]', args[1])
+            # remove spaces in the result elements
+            others = [i.strip() for i in others]
+            command = others[0]
+            string = args[0] + " " + " ".join(others[1:])
+            if command in calls.keys():
+                return calls[others[0]](string)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+    print() # TODO will this be valid for all exits
