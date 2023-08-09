@@ -33,23 +33,23 @@ print(my_user2)
 
 print("-- Create a new Instance--")
 my_state = State()
-my_state.name ='New York'
+my_state.name = "New York"
 my_city = City()
-my_city.name='NYC'
+my_city.name = "NYC"
 my_amenity = Amenity()
-my_amenity.name="Kitchen"
-my_place=Place()
-my_place.name ="My Place"
-my_place.description="This is my place"
-my_place.price="$10,56789"
-my_place.number_rooms=4
-my_place.max_guests=20
-my_place.latitude=-1.23456789
-my_place.longitude=1.23456789
-my_review= Review()
-my_review.text="I love this place!"
+my_amenity.name = "Kitchen"
+my_place = Place()
+my_place.name = "My Place"
+my_place.description = "This is my place"
+my_place.price = "$10,56789"
+my_place.number_rooms = 4
+my_place.max_guests = 20
+my_place.latitude = -1.23456789
+my_place.longitude = 1.23456789
+my_review = Review()
+my_review.text = "I love this place!"
 
- 
+
 my_user.save()
 my_user2.save()
 my_state.save()

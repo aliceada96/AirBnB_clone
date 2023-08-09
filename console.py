@@ -24,14 +24,15 @@ class HBNBCommand(cmd.Cmd):
     Returns:
         _type_: _description_
     """
+
     prompt = "(hbnb) "
-    classes = {'BaseModel',
-               'User',
-               'State',
-               'City',
-               'Place',
-               'Review',
-               'Amenity',
+    classes = {"BaseModel",
+               "User",
+               "State",
+               "City",
+               "Place",
+               "Review",
+               "Amenity"
                }
 
     def do_quit(self, arg):
@@ -42,8 +43,9 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """Quit command to exit the program.
         """
+        print()
         return True
-    
+
     def emptyline(self) -> bool:
         # return super().emptyline()
         pass
@@ -51,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Create an object from the model specified by its class."""
         if not arg or len(arg) == 0:
-            print('** class name missing **')
+            print("** class name missing **")
             return
         if arg not in HBNBCommand.classes:
             print("** class doesn't exist **")
@@ -69,16 +71,16 @@ class HBNBCommand(cmd.Cmd):
         """
         args = args.split()
         if not args or len(args) == 0:
-            print('** class name missing **')
+            print("** class name missing **")
             return
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         elif len(args) < 2:
-            print('** instance id missing **')
+            print("** instance id missing **")
             return
         elif "{}.{}".format(args[0], args[1]) not in storage.all():
-            print('** no instance found **')
+            print("** no instance found **")
             return
         else:
             print(storage.all()["{}.{}".format(args[0], args[1])])
@@ -92,16 +94,16 @@ class HBNBCommand(cmd.Cmd):
         """
         args = args.split()
         if not args or len(args) == 0:
-            print('** class name missing **')
+            print("** class name missing **")
             return
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         elif len(args) < 2:
-            print('** instance id missing **')
+            print("** instance id missing **")
             return
         elif "{}.{}".format(args[0], args[1]) not in storage.all():
-            print('** no instance found **')
+            print("** no instance found **")
             return
         else:
             del storage.all()["{}.{}".format(args[0], args[1])]
@@ -109,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """Print all string representation of all instances.
-        Representation is based or not on the class name. 
+        Representation is based or not on the class name.
 
         Args:
             args (str): a string containing args separated by spaces.
@@ -123,25 +125,41 @@ class HBNBCommand(cmd.Cmd):
             list_of_instances.append(eval(i.__class__.__name__)(**i).__str__())
         print(list_of_instances)
 
+    def do_count(self, args):
+        """Print number of objects from class."""
+        args = args.split()
+        if not args or len(args) != 1:
+            print("** class name missing **")
+            return
+        elif args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        else:
+            instances = 0
+            for i in storage.all().values():
+                if args[0] == i["__class__"]:
+                    instances += 1
+            print(instances)
+
     def do_update(self, args):
         """Print all string representation of all instances
-        Represenation is based or not on the class name. 
+        Represenation is based or not on the class name.
 
         Args:
             args (str): a string containing args separated by spaces.
         """
         args = args.split()
         if not args or len(args) == 0:
-            print('** class name missing **')
+            print("** class name missing **")
             return
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
         elif len(args) < 2:
-            print('** instance id missing **')
+            print("** instance id missing **")
             return
         elif "{}.{}".format(args[0], args[1]) not in storage.all():
-            print('** no instance found **')
+            print("** no instance found **")
             return
         elif len(args) < 3:
             print("** attribute name missing **")
@@ -153,8 +171,16 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             key = args[2]
-            value = args[3] # TODO probably should do eval() here
-            storage.all()["{}.{}".format(args[0], args[1])][key] = value
+            value = args[3]
+            # check that the input has a dictionary from the 3rd command
+            if isinstance(eval("".join(args[2:])), dict):
+                # convert the 3rd command from str to dict and iterate
+                for k, v in eval("{}".format("".join(args[2:]))).items():
+                    # update the dict with the key and value...
+                    storage.all()["{}.{}".format(args[0], args[1])][k] = v
+            else:
+                # no dictionary - standard format.
+                storage.all()["{}.{}".format(args[0], args[1])][key] = value
             storage.save()
 
     def default(self, line: str) -> None:
@@ -169,20 +195,21 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             str: calls the corresponding command the standard format
         """
-        calls = {"all": self.do_all,
-                 "show": self.do_show,
-                 "destroy": self.do_destroy,
-                 #"count": self.do_count,
-                 "update": self.do_update,
-                 }
+        calls = {
+            "all": self.do_all,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "count": self.do_count,
+            "update": self.do_update,
+        }
 
         if "." not in line:
-            print('*** Unknown syntax: {}\n'.format(line))
+            print("*** Unknown syntax: {}\n".format(line))
             return False
         else:
-            args = line.split('.', maxsplit=1)
+            args = line.split(".", maxsplit=1)
             # split the second arg at '(',')', and ','
-            others = re.split(r'[)(,]', args[1])
+            others = re.split(r"[)(,]", args[1])
             # remove spaces in the result elements
             others = [i.strip() for i in others]
             command = others[0]
@@ -191,6 +218,6 @@ class HBNBCommand(cmd.Cmd):
                 return calls[others[0]](string)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()
-    print() # TODO will this be valid for all exits
+    # print("") # TODO will this be valid for all exits
