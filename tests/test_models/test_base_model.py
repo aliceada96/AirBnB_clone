@@ -1,17 +1,10 @@
 #!/usr/bin/python3
-"""tests
-
-that the id is a uuid id
-
-the .__str__() ouput a string of the specified format
-
-that the created_at and updated_at are iso formats
-"""
 
 import unittest
 import uuid
 import datetime
 from models.base_model import BaseModel
+from models import storage
 
 
 class TestBaseModel(unittest.TestCase):
@@ -19,6 +12,10 @@ class TestBaseModel(unittest.TestCase):
     Args:
         unittest (module): inherit functionality from unittest's TestCase class
     """
+
+    instance1 = ""
+    instance2 = ""
+    instance3 = ""
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -41,48 +38,47 @@ class TestBaseModel(unittest.TestCase):
     def setUp(self) -> None:
         """This method is called b4 each test case to set up
         the initial state."""
-        pass
+        self.instance1 = BaseModel()
+        self.instance2 = BaseModel()
+        self.instance3 = BaseModel()
         # return super().setUp()
 
     def tearDown(self) -> None:
         """This method is called after each test method is run.
         It can be used to clean up any resources that were created
         in the setUp method."""
+        del storage.all()["{}.{}".format("BaseModel", self.instance1.id)]
+        del storage.all()["{}.{}".format("BaseModel", self.instance2.id)]
+        del storage.all()["{}.{}".format("BaseModel", self.instance3.id)]
         self.instances.clear()
-        # return super().tearDown()
 
     # TESTS FOR __INIT__, REPR AND STR METHODS
     def test__init__(self):
         """Test that an instance is created successfully"""
-        instance = BaseModel()
-        self.assertIsInstance(instance, BaseModel)
-        self.assertIn("id", instance.__dict__.keys())
-        self.assertIn("created_at", instance.__dict__.keys())
-        self.assertIn("updated_at", instance.__dict__.keys())
-        self.assertIsInstance(instance.id, str)
-        self.assertIsInstance(instance.created_at, datetime.datetime)
-        self.assertIsInstance(instance.updated_at, datetime.datetime)
-        # self.assertEqual(len(instance.id), UUID_LENGHT + 4)
-        # instance attributes added successfully
-        instance.name = "My First Model"
-        instance.my_number = 89
-        self.assertIn("name", instance.__dict__.keys())
-        self.assertIn("my_number", instance.__dict__.keys())
-
-    def test__repr__(self) -> str:
-        pass
-        # return super().__repr__()
+        self.instance1 = BaseModel()
+        self.assertIsInstance(self.instance1, BaseModel)
+        self.assertIn("id", self.instance1.__dict__.keys())
+        self.assertIn("created_at", self.instance1.__dict__.keys())
+        self.assertIn("updated_at", self.instance1.__dict__.keys())
+        self.assertIsInstance(self.instance1.id, str)
+        self.assertIsInstance(self.instance1.created_at, datetime.datetime)
+        self.assertIsInstance(self.instance1.updated_at, datetime.datetime)
+        # self.assertEqual(len(self.instance1.id), UUID_LENGHT + 4)
+        # self.instance1 attributes added successfully
+        self.instance1.name = "My First Model"
+        self.instance1.my_number = 89
+        self.assertIn("name", self.instance1.__dict__.keys())
+        self.assertIn("my_number", self.instance1.__dict__.keys())
 
     def test__str__(self):
         """Test that the __str__method returns the correct print format
-        of an instance
+        of an self.instance1
         """
-        instance = BaseModel()
-        # self.assertAlmostEquals(instance.__str__(),
-        #   "[BaseModel] (d7c81d7a-60fe-4851-a813-e2a185ea7723)
-        #   {'id': 'd7c81d7a-60fe-4851-a813-e2a185ea7723',
-        #    'created_at': datetime.datetime(2023, 8, 6, 21, 8, 7, 403778),
-        #    'updated_at': datetime.datetime(2023, 8, 6, 21, 8, 46, 146227)}")
+        self.instance1 = BaseModel()
+        expected_output = "[BaseModel] ({}) {}".format(
+            self.instance1.id, self.instance1.__dict__
+        )
+        self.assertEqual(str(self.instance1), expected_output)
 
     def test_id_uniqueness(self):
         """
@@ -90,32 +86,43 @@ class TestBaseModel(unittest.TestCase):
         Returns:
         - None
         """
-        instance1 = BaseModel()
-        instance2 = BaseModel()
-        instance3 = BaseModel()
-        self.assertNotEqual(instance1.id, instance2.id)
-        self.assertNotEqual(instance2.id, instance3.id)
-        self.assertNotEqual(instance3.id, instance1.id)
+        self.assertNotEqual(self.instance1.id, self.instance2.id)
+        self.assertNotEqual(self.instance2.id, self.instance3.id)
+        self.assertNotEqual(self.instance3.id, self.instance1.id)
 
     def test_save(self):
         """Test that save method updates the updated_at
         and that updated_at is at a later time than created at
         """
-        instance = BaseModel()
-        instance.save()
-        self.assertNotEqual(instance.created_at, instance.updated_at)
-        self.assertGreater(instance.updated_at, instance.created_at)
+        self.instance1 = BaseModel()
+        self.instance1.save()
+        self.assertNotEqual(
+            self.instance1.created_at, self.instance1.updated_at)
+        self.assertGreater(
+            self.instance1.updated_at, self.instance1.created_at)
 
     def test_to_dict(self):
         """Tests to see if the dict representation contains all keys"""
-        instance = BaseModel()
+        self.instance1 = BaseModel()
+        # Checks that all the keys were created
         expectedKeys = ["id", "created_at", "updated_at"]
-        actualDict = instance.to_dict()
+        actualDict = self.instance1.to_dict()
         for key in expectedKeys:
             with self.subTest():
                 self.assertTrue((key in list(actualDict)))
-        self.assertIsInstance(instance.to_dict(), dict)
-        actualDict = instance.to_dict()
+        # Checks that the method returns a dictionary
+        self.assertIsInstance(self.instance1.to_dict(), dict)
+        # cheks for correct type(str) for each key
+        actualDict = self.instance1.to_dict()
         for key in expectedKeys:
             with self.subTest():
-                self.assertIsInstance(instance.to_dict()[key], str)
+                self.assertIsInstance(self.instance1.to_dict()[key], str)
+        # Checks that the key:values match the instances
+        instance_dict = self.instance1.to_dict()
+        self.assertEqual(instance_dict["id"], self.instance1.id)
+        self.assertEqual(
+            instance_dict["created_at"], self.instance1.created_at.isoformat()
+        )
+        self.assertEqual(
+            instance_dict["updated_at"], self.instance1.updated_at.isoformat()
+        )
