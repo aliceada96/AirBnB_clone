@@ -32,17 +32,15 @@ class HBNBCommand(cmd.Cmd):
                "City",
                "Place",
                "Review",
-               "Amenity"
+               "Amenity",
                }
 
     def do_quit(self, arg):
-        """Quit command to exit the program.
-        """
+        """Quit command to exit the program."""
         return True
 
     def do_EOF(self, arg):
-        """Quit command to exit the program.
-        """
+        """Quit command to exit the program."""
         print()
         return True
 
@@ -52,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Create an object from the model specified by its class."""
-        if not arg or len(arg) == 0:
+        if not arg or len(arg) == 0:  # TO BE CHECKED
             print("** class name missing **")
             return
         if arg not in HBNBCommand.classes:
@@ -173,15 +171,20 @@ class HBNBCommand(cmd.Cmd):
             key = args[2]
             value = args[3]
             # check that the input has a dictionary from the 3rd command
-            if isinstance(eval("".join(args[2:])), dict):
+            x = "".join(args[2:])
+            x = x.replace(":", ": ").replace(",", ", ")
+            if x.startswith("{") and x.endswith("}"):
                 # convert the 3rd command from str to dict and iterate
-                for k, v in eval("{}".format("".join(args[2:]))).items():
-                    # update the dict with the key and value...
-                    storage.all()["{}.{}".format(args[0], args[1])][k] = v
+                try:
+                    for k, v in eval("{}".format(x)).items():
+                        # update the dict with the key and value...
+                        storage.all()["{}.{}".format(args[0], args[1])][k] = v
+                except ValueError:
+                    print("Invalid Dictionary")
             else:
                 # no dictionary - standard format.
                 storage.all()["{}.{}".format(args[0], args[1])][key] = value
-            storage.save()
+                storage.save()
 
     def default(self, line: str) -> None:
         """Call on an input line when the command prefix is not recognized.
@@ -204,7 +207,7 @@ class HBNBCommand(cmd.Cmd):
         }
 
         if "." not in line:
-            print("*** Unknown syntax: {}\n".format(line))
+            print("** Unknown syntax: {}\n".format(line))
             return False
         else:
             args = line.split(".", maxsplit=1)

@@ -4,7 +4,7 @@ from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """ Review Class
+    """Review Class
 
     Args:
         place_id (str): the Place.id
