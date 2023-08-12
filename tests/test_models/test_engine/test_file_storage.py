@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""This file contains unit tests for the file storage class."""
+"""This model contains unit tests for the FileStorage class."""
+
 # import os
 # import sys
 import unittest

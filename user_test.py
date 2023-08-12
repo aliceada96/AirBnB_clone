@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""This module is a rudimentary test to confirm functionality."""
+
 from models import storage
 from models.base_model import BaseModel
 from models.user import User

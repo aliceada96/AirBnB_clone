@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-"""This module implements a simple command interpreter for AirBnB program.
-"""
+"""This module implements a simple command interpreter for AirBnB program."""
+
 import cmd
 import re
 
@@ -16,13 +16,11 @@ from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
-    """Entry point of the command interpreter.
+    """Entry point of the command interpreter for the AirBnB program.
 
-    Args:
-        cmd (module): extends the functionality of the cmd module
-
-    Returns:
-        _type_: _description_
+    Attributes:
+        prompt (str): The command prompt.
+        classes (set): A set of available class names.
     """
 
     prompt = "(hbnb) "
@@ -45,11 +43,19 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self) -> bool:
+        """Do nothing on an empty line.
+
+        It Overrides emptyline() method from cmd.Cmd.
+        """
         # return super().emptyline()
         pass
 
     def do_create(self, arg):
-        """Create an object from the model specified by its class."""
+        """Create an object from the specified class.
+
+        Args:
+            arg (str): The class name.
+        """
         if not arg or len(arg) == 0:  # TO BE CHECKED
             print("** class name missing **")
             return
@@ -62,10 +68,12 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """Print the string representation of an instance.
+
         Representation is based on the class name and id.
+        Usage: show <Classname> <instance id>.
 
         Args:
-            args (str): a string containing args separated by spaces.
+            args (str): a string containing class name and id.
         """
         args = args.split()
         if not args or len(args) == 0:
@@ -85,10 +93,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, args):
         """Delete an instance based on the class name and id.
+
         (save the change into the JSON file)
 
         Args:
-            args (str): a string containing args separated by spaces.
+            args (str): a string containing class name and id.
+        Retuns:
+            None
         """
         args = args.split()
         if not args or len(args) == 0:
@@ -109,10 +120,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """Print all string representation of all instances.
+
         Representation is based or not on the class name.
 
         Args:
-            args (str): a string containing args separated by spaces.
+            args (str): a string containing a class name.
+        Returns:
+            None
         """
         args = args.split()
         if args and args[0] not in HBNBCommand.classes:
@@ -124,7 +138,14 @@ class HBNBCommand(cmd.Cmd):
         print(list_of_instances)
 
     def do_count(self, args):
-        """Print number of objects from class."""
+        """Print number of objects from class.
+
+        Args:
+            args (str): a string containing a class name.
+
+        Returns:
+            None
+        """
         args = args.split()
         if not args or len(args) != 1:
             print("** class name missing **")
@@ -140,11 +161,15 @@ class HBNBCommand(cmd.Cmd):
             print(instances)
 
     def do_update(self, args):
-        """Print all string representation of all instances
+        """Print all string representation of all instances.
+
         Represenation is based or not on the class name.
 
         Args:
-            args (str): a string containing args separated by spaces.
+            args (str): a string containing
+             class name, id, attribute key and value.
+        Returns:
+            None
         """
         args = args.split()
         if not args or len(args) == 0:

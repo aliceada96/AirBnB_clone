@@ -1,15 +1,20 @@
 #!/usr/bin/python3
-"""Unit tests for place module."""
+"""This module defines unit tests for the Place class."""
+
 import unittest
 from models.place import Place
 
 
 class Test_Place(unittest.TestCase):
+    """Test class for the Place class."""
+
     def test_instance_creation(self):
+        """Test if an instance of Place is created successfully."""
         instance = Place()
         self.assertIsInstance(instance, Place)
 
     def test_place_attributes(self):
+        """Test Place attributes."""
         instance = Place(
             city_id="NBO",
             user_id="gabby_com",

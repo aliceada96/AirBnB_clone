@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""This module defines unit tests for the HBNBCommand class."""
+
 import unittest
 from unittest.mock import patch
 from io import StringIO
@@ -9,12 +11,12 @@ class Test_HBNBCommand(unittest.TestCase):
     """Test class for the command line interface"""
 
     def test_prompt(self):
-        """Tests if prompt is set to '(hbnb) '."""
+        """Test if prompt is set to '(hbnb) '."""
         self.assertEqual("(hbnb) ", HBNBCommand.prompt)
         # to do a test that the prompt is "hbnb " when called from main
 
     def test_create(self):
-        """tests create method."""
+        """Test create method."""
         input = "create"
         expected_output = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as fakeOutput:
@@ -39,7 +41,7 @@ class Test_HBNBCommand(unittest.TestCase):
         # TO DO: check that instance is saved in the dict
 
     def test_exit(self):
-        """test exit functionality of cli."""
+        """Test exit functionality of cli."""
         input = "quit"
         expected_output = True
         result = HBNBCommand().onecmd(input)
@@ -61,9 +63,7 @@ class Test_HBNBCommand(unittest.TestCase):
         # To do: test that the cli exits
 
     def test_empty_line(self):
-        """test empty lines are ignored by parser
-        and not printed out on stdout.
-        """
+        """Test empty lines are ignored by parser and not printed on stdout."""
         input = "   \n\t  \r\n     \n\t  \
         \r\n"
         expected_output = ""
@@ -78,7 +78,7 @@ class Test_HBNBCommand(unittest.TestCase):
             mock_print.assert_not_called()
 
     def test_show(self):
-        """Test show command"""
+        """Test show command."""
 
         input1 = "show"
         expected_output1 = "** class name missing **"
@@ -117,7 +117,7 @@ class Test_HBNBCommand(unittest.TestCase):
         # to implement show with a real instance above
 
     def test_destroy(self):
-        """Test destroy command"""
+        """Test destroy command."""
 
         input1 = "destroy"
         expected_output1 = "** class name missing **"
@@ -149,7 +149,7 @@ class Test_HBNBCommand(unittest.TestCase):
         # to do destroy the actual instance
 
     def test_all(self):
-        """Test all command"""
+        """Test all command."""
         input2 = "all InvalidClass"
         expected_output1 = "** class doesn't exist **"
         with patch("sys.stdout", new=StringIO()) as fakeOutput:
@@ -160,7 +160,7 @@ class Test_HBNBCommand(unittest.TestCase):
         # to do for actual all
 
     def test_count(self):
-
+        """Test count command."""
         input1 = "count"
         expected_output1 = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as fakeOutput:
@@ -176,6 +176,7 @@ class Test_HBNBCommand(unittest.TestCase):
             self.assertEqual(expected_output1, output)
 
     def test_update(self):
+        """Test update command."""
         input1 = "update"
         expected_output1 = "** class name missing **"
         with patch("sys.stdout", new=StringIO()) as fakeOutput:
@@ -219,6 +220,7 @@ class Test_HBNBCommand(unittest.TestCase):
             self.assertEqual(expected_output1, output)"""
 
     def test_default(self):
+        """Test default command."""
         input1 = "InvalidInput"
         expected_output1 = "** Unknown syntax: {}".format(input1)
         with patch("sys.stdout", new=StringIO()) as fakeError:

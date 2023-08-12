@@ -1,21 +1,35 @@
 #!/usr/bin/python3
+"""This module defines the FileStorage class."""
+
 import json
 
 
 class FileStorage:
-    """serialize instances to a JSON file and deserializes JSON
-    file to instances:"""
+    """Serialize and deserialize instances to and from a JSON file.
+
+    Attributes:
+        __file_path (str): The path to the JSON file.
+        __objects (dict): A dictionary to store serialized objects.
+    """
 
     __file_path = "file.json"
     __objects = {}
 
     # def __init__(self, filename):
     def all(self):
-        """return list of objects in storage."""
+        """Return a dictionary of all objects in storage.
+
+        Returns:
+            dict: A dictionary containing all stored objects.
+        """
         return self.__objects
 
     def new(self, obj):
-        """sets in __objects the obj with key <obj class name>.id"""
+        """Set an object in __objects with a key of <obj class name>.id.
+
+        Args:
+            obj (object): The object to be stored.
+        """
         key = "{}.{}".format(type(obj).__name__, obj.id)
         value = obj.to_dict()
         self.__objects[key] = value
@@ -37,12 +51,12 @@ class FileStorage:
             return True"""
 
     def save(self):
-        """serializes __objects to the JSON file"""
+        """Serialize __objects to the JSON file."""
         with open(self.__file_path, "w", encoding="utf-8") as f:
             json.dump(self.__objects, f)
 
     def reload(self):
-        """deserializes the JSON file to __objects"""
+        """Deserialize the JSON file to __objects."""
         try:
 
             with open(self.__file_path, "r", encoding="utf-8") as f:

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""This module defines tests for the BaseModel class."""
 
 import unittest
 import uuid
@@ -8,7 +9,8 @@ from models import storage
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test the BaseModel functionality
+    """Test the BaseModel functionality.
+
     Args:
         unittest (module): inherit functionality from unittest's TestCase class
     """
@@ -20,6 +22,7 @@ class TestBaseModel(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """This method is called once before any tests are run.
+
         It can be used to set up any expensive resources
         that need to be shared across the test methods.
         """
@@ -29,6 +32,7 @@ class TestBaseModel(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         """This method is called once after all tests are run.
+
         It can be used to clean up any resources that were created
         in the setUpClass method.
         """
@@ -36,17 +40,18 @@ class TestBaseModel(unittest.TestCase):
         # return super().tearDownClass()
 
     def setUp(self) -> None:
-        """This method is called b4 each test case to set up
-        the initial state."""
+        """This method is called b4 each test to set up the initial state."""
         self.instance1 = BaseModel()
         self.instance2 = BaseModel()
         self.instance3 = BaseModel()
         # return super().setUp()
 
     def tearDown(self) -> None:
-        """This method is called after each test method is run.
+        """Call after each test method is run.
+
         It can be used to clean up any resources that were created
-        in the setUp method."""
+        in the setUp method.
+        """
         del storage.all()["{}.{}".format("BaseModel", self.instance1.id)]
         del storage.all()["{}.{}".format("BaseModel", self.instance2.id)]
         del storage.all()["{}.{}".format("BaseModel", self.instance3.id)]
@@ -54,7 +59,7 @@ class TestBaseModel(unittest.TestCase):
 
     # TESTS FOR __INIT__, REPR AND STR METHODS
     def test__init__(self):
-        """Test that an instance is created successfully"""
+        """Test that an instance is created successfully."""
         self.instance1 = BaseModel()
         self.assertIsInstance(self.instance1, BaseModel)
         self.assertIn("id", self.instance1.__dict__.keys())
@@ -71,9 +76,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn("my_number", self.instance1.__dict__.keys())
 
     def test__str__(self):
-        """Test that the __str__method returns the correct print format
-        of an self.instance1
-        """
+        """Test the str() method returns a correct printed instance format."""
         self.instance1 = BaseModel()
         expected_output = "[BaseModel] ({}) {}".format(
             self.instance1.id, self.instance1.__dict__
@@ -81,18 +84,19 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(self.instance1), expected_output)
 
     def test_id_uniqueness(self):
-        """
-        Tests if each instance has a unique id.
+        """Test if each instance has a unique id.
+
         Returns:
-        - None
+          None
         """
         self.assertNotEqual(self.instance1.id, self.instance2.id)
         self.assertNotEqual(self.instance2.id, self.instance3.id)
         self.assertNotEqual(self.instance3.id, self.instance1.id)
 
     def test_save(self):
-        """Test that save method updates the updated_at
-        and that updated_at is at a later time than created at
+        """Test save method updates the updated_at.
+
+        And that updated_at is at a later time than created at
         """
         self.instance1 = BaseModel()
         self.instance1.save()
@@ -102,7 +106,7 @@ class TestBaseModel(unittest.TestCase):
             self.instance1.updated_at, self.instance1.created_at)
 
     def test_to_dict(self):
-        """Tests to see if the dict representation contains all keys"""
+        """Test if the dict representation contains all keys"""
         self.instance1 = BaseModel()
         # Checks that all the keys were created
         expectedKeys = ["id", "created_at", "updated_at"]
