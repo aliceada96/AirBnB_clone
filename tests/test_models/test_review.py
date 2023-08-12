@@ -1,14 +1,20 @@
 #!/usr/bin/python3
+"""This module defines unit tests for the Review class."""
+
 import unittest
 from models.review import Review
 
 
 class Test_Review(unittest.TestCase):
+    """Test class for the Review class."""
+
     def test_instance_creation(self):
+        """Test if an instance of Review is created successfully."""
         instance = Review()
         self.assertIsInstance(instance, Review)
 
     def test_review_attributes(self):
+        """Test Review attributes."""
         instance = Review(
             place_id="Penthouse123",
             user_id="gabby_com",

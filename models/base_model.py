@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""This module defines the BaseModel class."""
 
 import uuid
 import datetime
@@ -6,8 +7,21 @@ from models import storage
 
 
 class BaseModel:
+    """The base class for all model instances.
+
+    Attributes:
+        id (str): The UUID identifying the instance.
+        created_at (datetime.datetime): The creation timestamp.
+        updated_at (datetime.datetime): The update timestamp.
+    """
+
     def __init__(self, *args, **kwargs):
-        """Initialize an instance of the BaseModel."""
+        """Initialize an instance of the BaseModel.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
@@ -16,7 +30,7 @@ class BaseModel:
                             self,
                             key,
                             datetime.datetime.strptime(
-                            value, "%Y-%m-%dT%H:%M:%S.%f"),
+                              value, "%Y-%m-%dT%H:%M:%S.%f"),
                         )
                     else:
                         setattr(self, key, value)
@@ -27,19 +41,29 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        """Print : [<class name>] (<self.id>) <self.__dict__>;"""
+        """Return a string representation of the instance.
+
+        Returns:
+            str: A formatted string including class name, ID, and attributes.
+
+        Print : [<class name>] (<self.id>) <self.__dict__>
+        """
         return "[{}] ({}) {}".format(
             self.__class__.__name__, self.id, vars(self))
 
     def save(self):
-        """Update the public instance attribute updated_at
-        with the current datetime."""
+        """Update the public instance attribute 'updated_at'.
+
+        It willl update it with the current datetime and save to storage.
+        """
         self.updated_at = datetime.datetime.now()
         storage.save()
 
     def to_dict(self):
-        """Return a dictionary containing all keys/values
-        of __dict__ of the instance:
+        """Return a dictionary representation of the instance.
+
+        Returns:
+            dict: A dictionary containing all attributes of the instance.
         """
         self_dict = self.__dict__.copy()
         self_dict["__class__"] = self.__class__.__name__
