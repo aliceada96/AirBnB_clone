@@ -1,14 +1,14 @@
 # Concept: 0x00. AirBnB clone - The console
 
-[Airbnb](airbnb.com) is an online marketplace and hospitality service platform that allows people to rent out their properties or spare rooms to travellers.The idea behind Airbnb is to provide an alternative accommodation option for travellers, allowing them to stay in unique places and experience local culture. Hosts can list their properties on the platform, including apartments, houses, villas, or even individual rooms within their own homes.
+[Airbnb](https://airbnb.com) is an online marketplace and hospitality service platform that allows people to rent out their properties or spare rooms to travellers. The idea behind Airbnb is to provide an alternative accommodation option for travellers, allowing them to stay in unique places and experience local culture. Hosts can list their properties on the platform, including apartments, houses, villas, or even individual rooms within their own homes.
 
 Travellers can search for available accommodations based on their destination, dates of travel, and specific preferences. They can view detailed listings with descriptions, photos, amenities, and reviews from previous guests. The booking process is done through the Airbnb platform, which provides a secure payment system and messaging system for communication between hosts and guests.
 
 ## Project Description
 
-In this part of the project, we create the console. This is a command-line interface that allows us to make actions such as creating a user, place or city, updating the attributes of a place, deleting, Do operations on objects (count, compute stats, etc…) and Retrieve an object from a file, a database etc…, etc. The cli enables us mirror the actions in the Airbnb website, without necessarily having a front-end interface.
+In this part of the project, we create the console. This is a command-line interface that allows us to make actions such as creating a user, place or city, updating the attributes of a place, deleting, Doing operations on objects (count, compute stats, etc…) and Retrieving an object from a file, a database etc…, etc. The CLI enables us to mirror the actions in the Airbnb website, without necessarily having a front-end interface.
 
-We first create a BaseModel class that creates most of the functionality. Most of the other classes reperesenting the Airbnb inherit from this BaseModel.
+We first create a BaseModel class that creates most of the functionality. Most of the other classes representing Airbnb, inherit from this BaseModel.
 
 ### The command interpreter
 
@@ -17,7 +17,7 @@ The command interpreter takes commands from a user either interactively (a comma
 ### Usage
 
 How to start the interpreter:
-First we clone this repo:
+First, we clone this repo:
 
     $ git clone https://github.com/aliceada96/AirBnB_clone.git
     $
@@ -37,7 +37,7 @@ To exit the console we can use the command `quit` or `ctrl + D`
     (hbnb) quit
     $
 
-To get the available list of commands we can enter 'help' onto the cli.
+To get the available list of commands we can enter 'help' onto the CLI.
 
     (hbnb) help
 
@@ -101,7 +101,7 @@ This class extends the cmd.Cmd module to create a command-line interface for int
 `default(self, line: str):` Called when the command prefix is not recognized.
 
 **Module: models/init.py**
-This module initializes the FileStorage instance called storage which handles serialization and deserialization of objects.
+This module initializes the FileStorage instance called storage which handles the serialization and deserialization of objects.
 
 **Module: models/amenity.py**
 This module defines the Amenity class which inherits from BaseModel. It represents an amenity for an accommodation.
@@ -167,5 +167,5 @@ A test module for testing the functionality of the State class.
 A test module for testing the functionality of the User class.
 
 AUTHORS:
-[Alice Ada](www.github.com/aliceada96),
-[Gabriel Wachira](www.github.com/Wachira-G)
+[Alice Ada](https://github.com/aliceada96),
+[Gabriel Wachira](https://github.com/Wachira-G)
