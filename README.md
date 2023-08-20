@@ -89,16 +89,16 @@ This class extends the cmd.Cmd module to create a command-line interface for int
 
 **Methods:**
 
-`do_quit(self, arg):` Quit command to exit the program.
-`do_EOF(self, arg):` Quit command to exit the program.
-`emptyline(self):` Overrides the default behavior of the empty line.
-`do_create(self, arg):` Creates an object based on the specified class.
-`do_show(self, args):` Displays the string representation of an instance.
-`do_destroy(self, args):` Deletes an instance based on class name and id.
-`do_all(self, args):` Displays string representations of all instances.
-`do_count(self, args):` Prints the number of objects from a specific class.
-`do_update(self, args):` Updates the attributes of an instance.
-`default(self, line: str):` Called when the command prefix is not recognized.
+- `do_quit(self, arg):` Quit command to exit the program.
+- `do_EOF(self, arg):` Quit command to exit the program.
+- `emptyline(self):` Overrides the default behavior of the empty line.
+- `do_create(self, arg):` Creates an object based on the specified class.
+- `do_show(self, args):` Displays the string representation of an instance.
+- `do_destroy(self, args):` Deletes an instance based on class name and id.
+- `do_all(self, args):` Displays string representations of all instances.
+- `do_count(self, args):` Prints the number of objects from a specific class.
+- `do_update(self, args):` Updates the attributes of an instance.
+- `default(self, line: str):` Called when the command prefix is not recognized.
 
 **Module: models/init.py**
 This module initializes the FileStorage instance called storage which handles the serialization and deserialization of objects.
