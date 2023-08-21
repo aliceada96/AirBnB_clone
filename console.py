@@ -163,9 +163,10 @@ class HBNBCommand(cmd.Cmd):
             print(instances)
 
     def do_update(self, args):
-        """Print all string representation of all instances.
+        """Update an instance based on the class name and id.
 
-        Represenation is based or not on the class name.
+         Updates by adding or updating attribute (save change into JSON file.
+        Representation is based or not on the class name.
 
         Args:
             args (str): a string containing
@@ -251,4 +252,6 @@ class HBNBCommand(cmd.Cmd):
                 return calls[others[0]](string)
 
 
-# print("") # TODO will this be valid for all exits
+if __name__ == "__main__":
+    HBNBCommand().cmdloop()
+    # print("") # TODO will this be valid for all exits
