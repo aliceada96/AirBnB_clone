@@ -14,11 +14,11 @@ class User(BaseModel):
         last_name (str): The user's last name.
     """
 
-    def __init__(self, *args, **kwargs):
-        """Initialize a new User instance."""
-        super().__init__(*args, **kwargs)
-
     email = ""
     password = ""
     first_name = ""
     last_name = ""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize a new User instance."""
+        super().__init__(*args, **kwargs)
