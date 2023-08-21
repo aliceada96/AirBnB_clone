@@ -3,6 +3,8 @@
 
 import cmd
 import re
+import shlex
+import json
 
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
@@ -134,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
             return
         list_of_instances = []
         for i in storage.all().values():
-            list_of_instances.append(eval(i.__class__.__name__)(**i).__str__())
+            list_of_instances.append(i.__str__())
         print(list_of_instances)
 
     def do_count(self, args):
@@ -171,7 +173,7 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             None
         """
-        args = args.split()
+        args = shlex.split(args)  # .split()
         if not args or len(args) == 0:
             print("** class name missing **")
             return
@@ -195,21 +197,24 @@ class HBNBCommand(cmd.Cmd):
         else:
             key = args[2]
             value = args[3]
-            # check that the input has a dictionary from the 3rd command
+            instance_key = "{}.{}".format(args[0], args[1])
+            instance = storage.all()[instance_key]
+
+            # check if the input has a dictionary from the 3rd command
             x = "".join(args[2:])
-            x = x.replace(":", ": ").replace(",", ", ")
             if x.startswith("{") and x.endswith("}"):
                 # convert the 3rd command from str to dict and iterate
                 try:
-                    for k, v in eval("{}".format(x)).items():
-                        # update the dict with the key and value...
-                        storage.all()["{}.{}".format(args[0], args[1])][k] = v
-                except ValueError:
-                    print("Invalid Dictionary")
+                    update_dict = json.loads(x)
+                    for k, v in update_dict.items():
+                        setattr(instance, k, v)
+                except json.JSONDecodeError:
+                    print("Invalid Json format")
+                    return
             else:
                 # no dictionary - standard format.
-                storage.all()["{}.{}".format(args[0], args[1])][key] = value
-                storage.save()
+                setattr(instance, key, value)
+                instance.save()
 
     def default(self, line: str) -> None:
         """Call on an input line when the command prefix is not recognized.
@@ -246,6 +251,4 @@ class HBNBCommand(cmd.Cmd):
                 return calls[others[0]](string)
 
 
-if __name__ == "__main__":
-    HBNBCommand().cmdloop()
-    # print("") # TODO will this be valid for all exits
+# print("") # TODO will this be valid for all exits
